@@ -1,9 +1,11 @@
-import React from "react";
+import React , {useState} from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { StyleSheet, FlatList } from "react-native";
-import { Card, Button, Text } from "react-native-paper";
+import { StyleSheet, FlatList, View } from "react-native";
+import { Appbar, Card, Button, TextInput, Text } from "react-native-paper";
 
 export default function HomeScreen({ navigation }) {
+  const [searchQuery, setSearchQuery] = useState("");
+
   const listings = [
     {
       id: "1",
@@ -32,23 +34,46 @@ export default function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <></>
+
+      <Appbar.Header style={styles.header}>
+        <Appbar.Action icon="menu" color="#fff" onPress={() => {}} size={22} />
+        <Appbar.Content title="Campus Bazaar" titleStyle={styles.title} />
+        <Appbar.Action icon="magnify" color="#fff" onPress={() => {}} size={22} />
+      </Appbar.Header>
+
+      <View style={styles.searchWrapper}>
+        <TextInput
+          mode="outlined"
+          placeholder="Search items near you..."
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          style={styles.searchInput}
+          left={<TextInput.Icon icon="magnify" color="#8B0000" />}
+          outlineColor="#eee"
+          activeOutlineColor="#8B0000"
+        />
+      </View>
+
       <FlatList
-        data={listings}
+        data={listings.filter((item) =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase())
+        )}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 10 }}
+        contentContainerStyle={{ padding: 10, paddingTop: 10 }}
         renderItem={({ item }) => (
-          <Card style={styles.card}>
-            <Card.Cover source={{ uri: item.image }} />
-            <Card.Title title={item.title} subtitle={`₹${item.price}`} />
-            <Card.Content>
-              <Text style={{ color: "#8B0000" }}>{item.desc}</Text>
-            </Card.Content>
-            <Card.Actions>
-              <Button textColor="#8B0000">View</Button>
-              <Button textColor="#8B0000">♡</Button>
-              <Button textColor="#8B0000">Add</Button>
-            </Card.Actions>
+          <Card style={styles.card} mode="elevated" elevation={3}>
+            <View style={styles.cardInner}>
+              <Card.Cover source={{ uri: item.image }} style={{borderRadius:20}}/>
+              <Card.Title title={item.title} subtitle={`₹${item.price}`} />
+              <Card.Content>
+                <Text style={{ color: "#8B0000" }}>{item.desc}</Text>
+              </Card.Content>
+              <Card.Actions>
+                <Button textColor="#8B0000">View</Button>
+                <Button textColor="white">Wishlist</Button>
+                <Button textColor="white">Add To Cart</Button>
+              </Card.Actions>
+            </View>
           </Card>
         )}
       />
@@ -61,10 +86,35 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#FFFFFF",
   },
+  header: {
+    backgroundColor: "#8B0000",
+    height: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  title: {
+    color: "#FFFFFF",
+    fontWeight: "bold",
+    fontSize: 16,
+
+  },
+  searchWrapper: {
+    paddingHorizontal: 10,
+    paddingTop: 6,
+    paddingBottom: 8,
+    backgroundColor: "#fff",
+  },
+  searchInput: {
+    backgroundColor: "#fff",
+    fontSize: 14,
+    height: 40,
+  },
   card: {
     marginBottom: 10,
     backgroundColor: "#f8f8f8",
-    borderRadius: 12,
+    borderRadius:20
+  },
+  cardInner: {
     overflow: "hidden",
   },
 });

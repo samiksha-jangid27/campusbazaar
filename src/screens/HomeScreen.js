@@ -5,32 +5,7 @@ import { Appbar, Card, Button, TextInput, Text } from "react-native-paper";
 
 export default function HomeScreen({ navigation }) {
   const [searchQuery, setSearchQuery] = useState("");
-
-  const listings = [
-    {
-      id: "1",
-      title: "Used Books Set",
-      desc: "Engineering books in good condition.",
-      image: "https://apollo.olx.in/v1/files/ro7gqfjtdti22-IN/image",
-      price: 499,
-    },
-    {
-      id: "2",
-      title: "Guitar for Sale",
-      desc: "Acoustic guitar perfect for beginners.",
-      image:
-        "https://images.unsplash.com/photo-1516924962500-2b4b3b99ea02?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Z3VpdGFyfGVufDB8fDB8fHww&fm=jpg&q=60&w=3000",
-      price: 2999,
-    },
-    {
-      id: "3",
-      title: "Laptop Bag",
-      desc: "Durable and stylish bag for students.",
-      image:
-        "https://rukminim2.flixcart.com/image/480/640/xif0q/backpack/r/m/6/6-usb-point-laptop-bag-used-widely-in-all-kinds-of-official-original-imahcd2ngjukzmzw.jpeg?q=90",
-      price: 899,
-    },
-  ];
+  const { state, dispatch } = useContext(AppContext);
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -55,26 +30,19 @@ export default function HomeScreen({ navigation }) {
       </View>
 
       <FlatList
-        data={listings.filter((item) =>
+        data={state.listings.filter((item) =>
           item.title.toLowerCase().includes(searchQuery.toLowerCase())
         )}
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ padding: 10, paddingTop: 10 }}
         renderItem={({ item }) => (
-          <Card style={styles.card} mode="elevated" elevation={3}>
-            <View style={styles.cardInner}>
-              <Card.Cover source={{ uri: item.image }} style={{borderRadius:20}}/>
-              <Card.Title title={item.title} subtitle={`₹${item.price}`} />
-              <Card.Content>
-                <Text style={{ color: "#8B0000" }}>{item.desc}</Text>
-              </Card.Content>
-              <Card.Actions>
-                <Button textColor="#8B0000">View</Button>
-                <Button textColor="white">Wishlist</Button>
-                <Button textColor="white">Add To Cart</Button>
-              </Card.Actions>
-            </View>
-          </Card>
+          <ListingCard
+            item={item}
+            onPress={() => navigation.navigate("Details", { id: item.id })}
+            onFavorite={() => dispatch({ type: "toggleFavorite", payload: item.id })}
+            isFav={state.favorites.includes(item.id)}
+            onCart={() => dispatch({ type: "addToCart", payload: item })}
+          />
         )}
       />
     </SafeAreaView>

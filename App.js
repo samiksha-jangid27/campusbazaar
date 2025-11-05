@@ -1,6 +1,8 @@
 import React from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 import HomeScreen from "./src/screens/HomeScreen";
+import FavoritesScreen from "./src/screens/FavoritesScreen";
+import { AppProvider } from "./src/contexts/AppProvider";
 
 const theme = {
   colors: {
@@ -18,7 +20,10 @@ const theme = {
 export default function App() {
   return (
     <PaperProvider theme={theme}>
-        <HomeScreen />
+      <AppProvider>
+        <FavoritesScreen />
+      </AppProvider>
+        
     </PaperProvider>
   );
 }

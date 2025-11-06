@@ -18,7 +18,7 @@ export default function HomeScreen({ navigation }) {
 
       <Appbar.Header style={styles.header}>
         <Appbar.Action icon="menu" color="#fff" onPress={() => {}} />
-        <Text style={styles.title}>Campus Bazaar</Text>
+          <Appbar.Content title="Campus Bazaar" titleStyle={styles.title} />
       </Appbar.Header>
 
 
@@ -39,7 +39,7 @@ export default function HomeScreen({ navigation }) {
       <FlatList
         data={filteredListings}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: 12, paddingBottom: 100 }}
+        contentContainerStyle={{ padding: 12, paddingBottom: 120 }}
         renderItem={({ item }) => (
           <ListingCard
             item={item}
@@ -75,6 +75,11 @@ const styles = StyleSheet.create({
     // elevation: 3,
     // paddingHorizontal:16,
 
+  },
+    subtitle: {
+    fontSize: 12,
+    color: "#777",
+    marginTop: 6,
   },
   title: {
     color: "#FFFFFF",
